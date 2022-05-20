@@ -1,25 +1,27 @@
-const gameBoard = document.getElementById('gameBoard');
-const boardCell = document.querySelectorAll('.boardCell');
+const cells = document.querySelectorAll('.cell');
 const restartBtn = document.querySelector('#restartBtn')
+const winnerMsg = document.querySelector('.winnerMsg')
 
 restartBtn.addEventListener('click',function(){
     window.location.reload();
     return false;
   });
   
-function putChoice(e) {
+function cellClicked(e) {
     //  console.log(countXMove())
     //  console.log(countOMove());
      if(countXMove()==countOMove() && this.innerText == ""){
         this.innerText = "X";
-        findWinner()
+        findWinner();
+        isDraw();
      } else if (countXMove() - countOMove() == 1 && this.innerText == ""){
         this.innerText = "O";
-        findWinner()
+        findWinner();
+        isDraw();
      }
 }
 
-boardCell.forEach(cell => cell.addEventListener('click',putChoice));
+cells.forEach(cell => cell.addEventListener('click',cellClicked));
 
 
 const cell1 = document.querySelector('[data-cell-index="1"]')
@@ -45,7 +47,7 @@ const winPattern = [
 
 function countXMove(){
     let Xnumber = 0
-    boardCell.forEach(cell=> {
+    cells.forEach(cell=> {
         if(cell.innerText == "X"){
             Xnumber++;
         }
@@ -55,7 +57,7 @@ function countXMove(){
 
 function countOMove(){
     let Onumber = 0
-    boardCell.forEach(cell=> {
+    cells.forEach(cell=> {
         if(cell.innerText == "O"){
             Onumber++;
         }
@@ -67,14 +69,18 @@ function findWinner(){
     winPattern.forEach(arr=> {
         if(arr[0].innerText == "X" && arr[1].innerText == arr[0].innerText && arr[2].innerText == arr[0].innerText ){
             // arr.every(cell=> cell.innerText == arr[0].innerText)
-            alert('X Wins')
+            winnerMsg.innerText = "Player X wins!";
         }
         if(arr[0].innerText == "O" && arr[1].innerText == arr[0].innerText && arr[2].innerText == arr[0].innerText ){
-            alert('O Wins')
+            winnerMsg.innerText = "Player O wins!";
         }
     })
 
 }
 
 
-    
+function isDraw() {
+    if([...cells].every(cell=>cell.innerText !== "") && winnerMsg.innerText == ""){
+        winnerMsg.innerText = "It's a draw.";
+    }
+}    
